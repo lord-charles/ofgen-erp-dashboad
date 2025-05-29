@@ -17,6 +17,7 @@ import type { ServiceOrderFormData } from "./components/schemas"
 import type { ServiceOrder } from "./types/service-order"
 import ServiceOrderTable from "./service-table/service-order"
 import { useToast } from "@/hooks/use-toast";
+import { Card } from "@/components/ui/card"
 
 interface ServiceOrderDashboardProps {
   serviceOrders: ServiceOrder[]
@@ -56,8 +57,10 @@ export default function ServiceOrderDashboard({ serviceOrders }: ServiceOrderDas
         {/* Stats Cards */}
         <StatCards serviceOrders={serviceOrders} />
 
-        <div className="flex items-center justify-between">
-          <div>
+        <Card
+        className="p-2">
+         <div className="flex items-center justify-between mb-2">
+         <div>
             <h2 className="text-3xl font-bold tracking-tight">
               Service Orders
             </h2>
@@ -78,9 +81,9 @@ export default function ServiceOrderDashboard({ serviceOrders }: ServiceOrderDas
               <ServiceOrderForm onSubmit={handleCreateOrder} onCancel={() => setIsAddDrawerOpen(false)} loading={loadingCreate} />
             </DrawerContent>
           </Drawer>
-        </div>
-        {/* Service Orders Table */}
+         </div>
         <ServiceOrderTable data={serviceOrders} />
+        </Card>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import {
   Plus,
   Building2,
   UserPlus,
+  Sparkles,
 } from "lucide-react";
 import { User } from "@/types/user";
 import EmployeeTable from "./users-table/user";
@@ -97,7 +98,8 @@ export default function EmployeeModule({ initialData, subcontractors: initialSub
               trigger={
                 <Button size="sm">
                   <UserPlus className="h-5 w-5 mr-2" />
-                  Add New Contractor
+                  Add Contractor
+                  <Sparkles className="h-4 w-4 ml-1" />
                 </Button>
               }
             />
@@ -107,9 +109,10 @@ export default function EmployeeModule({ initialData, subcontractors: initialSub
               handleAdd(subcontractor as Subcontractor);
             }}
             trigger={
-              <Button size="sm" variant="outline" >
+              <Button size="sm" variant="outline" className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg hover:shadow-xl transition-all duration-200 text-white">
                   <Plus className="h-4 w-4 mr-2" />
-                Add New Subcontractor
+                Add Subcontractor
+                <Sparkles className="h-4 w-4 ml-1" />
               </Button>
             }
           />
@@ -130,13 +133,17 @@ export default function EmployeeModule({ initialData, subcontractors: initialSub
               </TabsList>
               <TabsContent value="contrators" className="mt-4 space-y-6 max-w-[calc(100vw-300px)]">
                 <ConsultantStats consultants={initialData} />
+               <Card className="p-2">
                 <EmployeeTable
                   employees={initialData}
                 />
+               </Card>
               </TabsContent>
               <TabsContent value="sub-contrators" className="mt-4 space-y-6 max-w-[calc(100vw-300px)]">
               <SubcontractorStats subcontractorData={subcontractors} />
+              <Card className="p-2">
                 <SubContractorTable employees={subcontractors} />
+              </Card>
               </TabsContent>
             </Tabs>
           </div>

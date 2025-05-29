@@ -76,7 +76,6 @@ export function LocationActions() {
   }
 
   return (
-    <div className="flex items-center gap-3">
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogTrigger asChild>
           <Button className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg hover:shadow-xl transition-all duration-200 text-white">
@@ -240,34 +239,5 @@ export function LocationActions() {
         </DialogContent>
       </Dialog>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon" className="shadow-sm hover:shadow-md transition-shadow">
-            <MoreVertical className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel className="font-semibold">Bulk Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer">
-            <Download className="mr-2 h-4 w-4" />
-            Export to CSV
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <FileSpreadsheet className="mr-2 h-4 w-4" />
-            Export to Excel
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer">
-            <Upload className="mr-2 h-4 w-4" />
-            Import Locations
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <MapPin className="mr-2 h-4 w-4" />
-            View All on Map
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
   )
 }

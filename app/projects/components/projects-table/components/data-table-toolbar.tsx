@@ -24,14 +24,14 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter by project name, client, project manager..."
+          placeholder="Filter by project name, location, project leader..."
           value={
             (table.getColumn("combinedSearch")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
             table.getColumn("combinedSearch")?.setFilterValue(event.target.value)
           }
-          className="h-8 w-[150px] lg:w-[330px]"
+          className="h-8 w-[150px] lg:w-[350px]"
         />
         {table.getColumn("status") && (
           <DataTableFacetedFilter

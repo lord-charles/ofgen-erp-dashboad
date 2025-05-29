@@ -36,6 +36,23 @@ export async function getServiceOrders() {
   }
 }
 
+export async function getServiceOrdersBasicInfo() {
+  try {
+    const config = await getAxiosConfig();
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/service-orders/basic-info`,
+      config
+    );
+    return data;
+  } catch (error: any) {
+    if (error instanceof AxiosError && error.response?.status === 401) {
+      await handleUnauthorized();
+    }
+    throw error?.response?.data.message || error;
+  }
+}
+
+
 export async function createServiceOrder(serviceOrderData: any) {
   try {
     const config = await getAxiosConfig();

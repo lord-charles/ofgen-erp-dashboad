@@ -1,8 +1,6 @@
 "use client";
 
-import { MoreHorizontal } from "lucide-react";
 import { Row } from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,21 +9,24 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
-import Link from "next/link";
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { deleteProject } from "@/services/project.service";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Pencil, Trash2 } from "lucide-react";
+import { DropdownMenuShortcut } from "@/components/ui/dropdown-menu";
+import { ProjectDrawer } from "../view-edit-project";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -35,20 +36,20 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const project = row.original as any;
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isProjectDrawerOpen, setIsProjectDrawerOpen] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
   const { toast } = useToast();
 
   const handleDelete = async () => {
-    if (isDeleting) return;
+    if (loadingDelete) return;
     try {
-      setIsDeleting(true);
+      setLoadingDelete(true);
       await deleteProject(project._id);
       toast({
         title: "Success",
         description: "Project deleted successfully",
       });
-      // Refresh the page to update the table
       window.location.reload();
     } catch (error) {
       toast({
@@ -57,61 +58,62 @@ export function DataTableRowActions<TData>({
         variant: "destructive",
       });
     } finally {
-      setIsDeleting(false);
+      setLoadingDelete(false);
       setIsDeleteDialogOpen(false);
     }
   };
 
   return (
-    <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+ <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
           >
-            <MoreHorizontal className="h-4 w-4" />
+            <DotsHorizontalIcon className="h-4 w-4" />
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
-          <Link href={`/projects/${project._id}`}>
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-          </Link>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => setIsProjectDrawerOpen(true)}>
+            <Pencil className="h-5 w-5" />
+            View | Edit Form
+          </DropdownMenuItem>
+         
           <DropdownMenuSeparator />
-
-          <DialogTrigger asChild>
-            <DropdownMenuItem className="text-red-600">
-              Delete Project
-            </DropdownMenuItem>
-          </DialogTrigger>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <DropdownMenuItem className="text-red-600 focus:text-red-700" onSelect={e => e.preventDefault()}>
+                <Trash2 className="h-5 w-5" />
+                Delete
+                <DropdownMenuShortcut>Del</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Project</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete <b>{project.name}</b>? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={loadingDelete}>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} disabled={loadingDelete} className="bg-red-600 hover:bg-red-700 text-white">
+                  {loadingDelete ? "Deleting..." : "Delete"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete Project</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to delete this project? This action cannot be undone.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => setIsDeleteDialogOpen(false)}
-            disabled={isDeleting}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
-            {isDeleting ? "Deleting..." : "Delete"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <ProjectDrawer 
+        open={isProjectDrawerOpen} 
+        onOpenChange={setIsProjectDrawerOpen}
+        project={project}
+      />
+
+    </>
   );
 }

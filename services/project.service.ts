@@ -77,6 +77,7 @@ export interface Subcontractor {
   skills?: string[];
   isActive: boolean;
   notes?: string;
+  _id?: string;
 }
 
 export interface LocationCoordinates {
@@ -240,8 +241,8 @@ export async function getProjectById(id: string): Promise<Project | null> {
 }
 
 export async function createProject(
-  project: CreateProjectDto
-): Promise<Project | null> {
+  project:any
+) {
   try {
     const config = await getAxiosConfig();
     const response = await axios.post(
@@ -260,8 +261,8 @@ export async function createProject(
 
 export async function updateProject(
   id: string,
-  project: CreateProjectDto
-): Promise<Project | null> {
+  project:any
+) {
   try {
     const config = await getAxiosConfig();
     const response = await axios.patch(

@@ -50,7 +50,7 @@ async function LocationsContent() {
   return (
     <div className="space-y-8 animate-in fade-in-50 duration-500">
       <LocationStats stats={{ ...stats, locations }} />
-      <Card className="border-0 shadow-xl ">
+      <Card className="p-2 shadow-xl ">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">

@@ -169,7 +169,7 @@ export async function deleteSubcontractor(id: string): Promise<boolean> {
   }
 }
 
-export async function getSubcontractorsBasicInfo(): Promise<SubcontractorBasicInfo[]> {
+export async function getSubcontractorsBasicInfo() {
   try {
     const config = await getAxiosConfig();
     const response = await axios.get(

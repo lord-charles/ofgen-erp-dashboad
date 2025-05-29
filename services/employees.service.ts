@@ -49,6 +49,27 @@ export async function getAllEmployees(
   }
 }
 
+export async function getContractorBasicInfo() {
+  try {
+    const config = await getAxiosConfig();
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/users/basic-info`,
+      config
+    );
+    return response.data.users || [];
+  } catch (error: any) {
+    console.error("Failed to fetch employees:", error);
+    if (error instanceof AxiosError && error.response?.status === 401) {
+      await handleUnauthorized();
+    }
+
+    throw error?.response?.data.message || error;
+  }
+}
+
+
+
+
 export async function getEmployeeById(id: string): Promise<User | null> {
   try {
     const config = await getAxiosConfig();
@@ -89,7 +110,7 @@ export async function registerEmployee(
 
 export async function updateEmployee(
   id: string,
-  employee: CreateEmployeeDto
+  employee: any
 ): Promise<User | null> {
   try {
     const config = await getAxiosConfig();
