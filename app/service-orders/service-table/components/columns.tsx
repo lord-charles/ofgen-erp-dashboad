@@ -51,11 +51,25 @@ export const columns: ColumnDef<ServiceOrder, any>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-    cell: ({ row }) => (
-      <Badge variant="outline" className="capitalize">
-        {row.original.status}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const status = row.original.status?.toLowerCase() || '';
+      const statusConfig = {
+        draft: { variant: 'secondary', className: 'bg-gray-100 text-gray-800 hover:bg-gray-100' },
+        pending: { variant: 'outline', className: 'bg-yellow-50 text-yellow-700 border-yellow-200 hover:bg-yellow-50' },
+        approved: { variant: 'default', className: 'bg-green-50 text-green-700 hover:bg-green-50' },
+        rejected: { variant: 'destructive', className: 'bg-red-50 text-red-700 hover:bg-red-50' },
+        completed: { variant: 'default', className: 'bg-blue-50 text-blue-700 hover:bg-blue-50' },
+      }[status] || { variant: 'outline', className: '' };
+  
+      return (
+        <Badge 
+          variant={statusConfig.variant as any} 
+          className={`capitalize ${statusConfig.className}`}
+        >
+          {row.original.status}
+        </Badge>
+      );
+    }, 
   },
   {
     accessorKey: "totalValue",

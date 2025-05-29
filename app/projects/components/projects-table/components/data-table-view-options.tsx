@@ -22,11 +22,11 @@ export function DataTableViewOptions<TData>({
   table,
 }: DataTableViewOptionsProps<TData>) {
   useEffect(() => {
-    const columnsToHide = ["combinedName","totalValue"];
+    const columnsToHide = ["combinedSearch", "projectLeader", "projectType", "contractValue", "timeline", "risks"];
     columnsToHide.forEach((columnId) => {
       const column = table.getColumn(columnId);
       if (column && column.getIsVisible()) {
-        column.toggleVisibility(false);
+        column.toggleVisibility(false); 
       }
     });
 

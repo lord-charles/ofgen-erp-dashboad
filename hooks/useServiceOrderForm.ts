@@ -65,14 +65,97 @@ export const useServiceOrderForm = () => {
     const [isFormMode, setIsFormMode] = useState(false);
     const printRef = useRef<HTMLDivElement>(null);
 
-    const loadSampleData = useCallback(() => {
-        const storedOrder = localStorage.getItem('selectedServiceOrder');
-        if (storedOrder) {
-            const parsedOrder = JSON.parse(storedOrder);
-            setServiceOrders([parsedOrder]);
-            setSelectedOrder(parsedOrder);
-            return;
-        }
+    const defaultOrder: ServiceOrderData = {
+    _id: '',
+    issuedBy: '',
+    issuedTo: '',
+    serviceOrderDate: '',
+    contactInfo: {
+        name: '',
+        telephone: '',
+        email: '',
+        physicalAddress: '',
+    },
+    locationInfo: {
+        region: '',
+        subRegion: '',
+        coordinates: {
+            latitude: 0,
+            longitude: 0,
+        },
+    },
+    siteDetails: {
+        siteId: '',
+        siteType: '',
+        roofType: '',
+        siteClassification: '',
+        lastMile: '',
+        other: '',
+    },
+    designSummary: {},
+    billOfMaterials: [],
+    status: '',
+    totalValue: 0,
+    comments: '',
+    createdAt: '',
+    updatedAt: '',
+    approval: {
+        approvedBy: '',
+        approvedDate: '',
+        approvalComments: '',
+    },
+    signatures: {
+        clientSignature: '',
+        clientName: '',
+        clientDate: '',
+        vendorSignature: '',
+        vendorName: '',
+        vendorDate: '',
+    },
+};
+
+const loadSampleData = useCallback(() => {
+    const storedOrder = localStorage.getItem('selectedServiceOrder');
+    if (storedOrder) {
+        const parsedOrder = JSON.parse(storedOrder);
+        // Normalize loaded order
+        const normalizedOrder: ServiceOrderData = {
+            ...defaultOrder,
+            ...parsedOrder,
+            contactInfo: {
+                ...defaultOrder.contactInfo,
+                ...(parsedOrder.contactInfo || {})
+            },
+            locationInfo: {
+                ...defaultOrder.locationInfo,
+                ...(parsedOrder.locationInfo || {}),
+                coordinates: {
+                    ...defaultOrder.locationInfo.coordinates,
+                    ...((parsedOrder.locationInfo && parsedOrder.locationInfo.coordinates) || {})
+                }
+            },
+            siteDetails: {
+                ...defaultOrder.siteDetails,
+                ...(parsedOrder.siteDetails || {})
+            },
+            designSummary: {
+                ...defaultOrder.designSummary,
+                ...(parsedOrder.designSummary || {})
+            },
+            billOfMaterials: parsedOrder.billOfMaterials || [],
+            approval: {
+                ...defaultOrder.approval,
+                ...(parsedOrder.approval || {})
+            },
+            signatures: {
+                ...defaultOrder.signatures,
+                ...(parsedOrder.signatures || {})
+            },
+        };
+        setServiceOrders([normalizedOrder]);
+        setSelectedOrder(normalizedOrder);
+        return;
+    }
 
         const sampleData: ServiceOrderData[] = [
             {

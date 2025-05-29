@@ -1,19 +1,34 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
+import EmployeeModule from "./users/employees";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { getAllEmployees } from "@/services/employees.service";
+import { getAllSubcontractors } from "@/services/subcontractors.service";
 
-export default function ContractorsPage() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function EmployeesPage() {
+
+  const [employeesData, subcontractorsData] = await Promise.all([
+    getAllEmployees(),
+    getAllSubcontractors(),
+  ]);
   return (
     <SidebarProvider>
-      <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-        <div className="flex items-center">
-          <h1 className="text-lg font-semibold md:text-2xl">Contractors</h1>
-        </div>
-        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
-          <div className="flex flex-col items-center gap-1 text-center">
-            <h3 className="text-2xl font-bold tracking-tight">Contractor Management</h3>
-            <p className="text-sm text-muted-foreground">Manage contractor profiles and project assignments</p>
-          </div>
-        </div>
+    <AppSidebar variant="inset" />
+    <SidebarInset >
+      <SiteHeader />
+      <div className="min-h-screen">
+        <div className="p-2">
+
+        <EmployeeModule
+          initialData={employeesData?.users || []}
+          subcontractors={subcontractorsData || []}
+        />
+    </div>
       </div>
+    </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

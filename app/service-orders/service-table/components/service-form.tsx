@@ -132,7 +132,7 @@ const ViewServiceOrderForm = () => {
                             variant={selectedOrder.status === 'approved' ? 'default' : 'secondary'}
                             className="px-4 py-2 text-sm font-semibold"
                         >
-                            {selectedOrder.status.toUpperCase()}
+                            {(selectedOrder.status || '').toUpperCase()}
                         </Badge>
                     </div>
                     <div className="flex gap-3">
@@ -145,11 +145,11 @@ const ViewServiceOrderForm = () => {
                             <Edit3 className="h-5 w-5 mr-2" />
                             {isFormMode ? 'View Mode' : 'Edit Mode'}
                         </Button>
-                        <Button onClick={handlePrint} variant="outline" size="lg" className="h-12 px-6">
+                        <Button onClick={async () => {await setIsFormMode(false); handlePrint()}} variant="outline" size="lg" className="h-12 px-6">
                             <Printer className="h-5 w-5 mr-2" />
                             Print
                         </Button>
-                        <Button onClick={handleDownloadPDF} size="lg" className="h-12 px-6 bg-blue-600 hover:bg-blue-700">
+                        <Button onClick={async () => {await setIsFormMode(false); handleDownloadPDF()}} size="lg" className="h-12 px-6 bg-blue-600 hover:bg-blue-700">
                             <Download className="h-5 w-5 mr-2" />
                             Download PDF
                         </Button>
@@ -181,7 +181,7 @@ const ViewServiceOrderForm = () => {
                                     </div>
                                     <div className="text-center">
                                         <div className="font-semibold mb-1">DOCUMENT ID:</div>
-                                        <div className="font-bold text-lg print:">{selectedOrder._id}</div>
+                                        <div className="font-bold text-lg print:">{selectedOrder.siteDetails?.siteId || ""}</div>
                                     </div>
                                     <div className="text-right">
                                         <div className="font-semibold mb-1">DATE ISSUED:</div>
@@ -192,8 +192,28 @@ const ViewServiceOrderForm = () => {
                                                 className="bg-white/20 border-white/30 text-white placeholder:text-white/70 print:print: print:border-gray-400"
                                             />
                                         ) : (
-                                            <div className="font-bold text-lg print:">{selectedOrder.serviceOrderDate}</div>
+                                            <div className="font-bold text-lg print:">
+                                            {selectedOrder.serviceOrderDate ? (
+                                              (() => {
+                                                try {
+                                                  const date = new Date(selectedOrder.serviceOrderDate);
+                                                  return !isNaN(date.getTime()) 
+                                                    ? new Intl.DateTimeFormat('en-US', { 
+                                                        year: 'numeric', 
+                                                        month: 'long', 
+                                                        day: 'numeric' 
+                                                      }).format(date)
+                                                    : 'Invalid Date';
+                                                } catch {
+                                                  return 'Invalid Date';
+                                                }
+                                              })()
+                                            ) : (
+                                              'No Date'
+                                            )}
+                                          </div>
                                         )}
+
                                     </div>
                                 </div>
                             </div>
@@ -235,13 +255,13 @@ const ViewServiceOrderForm = () => {
                                         <Label className="text-base font-semibold ">Physical Address</Label>
                                         {isFormMode ? (
                                             <Textarea
-                                                value={selectedOrder.contactInfo.physicalAddress || ''}
+                                                value={selectedOrder.contactInfo?.physicalAddress || ''}
                                                 onChange={(e) => handleInputChange('physicalAddress', e.target.value, 'contactInfo')}
                                                 className="mt-2 min-h-[80px] border-2 border-gray-300 focus:border-blue-500"
                                             />
                                         ) : (
                                             <div className="mt-2 p-3 rounded border min-h-[80px] print:print:border-gray-400">
-                                                {selectedOrder.contactInfo.physicalAddress}
+                                                {selectedOrder.contactInfo?.physicalAddress || ''}
                                             </div>
                                         )}
                                     </div>
@@ -249,7 +269,7 @@ const ViewServiceOrderForm = () => {
                                         <Label className="text-base font-semibold ">Contact Person</Label>
                                         {isFormMode ? (
                                             <Input
-                                                value={selectedOrder.contactInfo.name}
+                                                value={selectedOrder.contactInfo?.name || ''}
                                                 onChange={(e) => handleInputChange('name', e.target.value, 'contactInfo')}
                                                 className="mt-2 h-12 border-2 border-gray-300 focus:border-blue-500"
                                             />
@@ -263,7 +283,7 @@ const ViewServiceOrderForm = () => {
                                         <Label className="text-base font-semibold ">Telephone Number</Label>
                                         {isFormMode ? (
                                             <Input
-                                                value={selectedOrder.contactInfo.telephone}
+                                                value={selectedOrder.contactInfo?.telephone || ''}
                                                 onChange={(e) => handleInputChange('telephone', e.target.value, 'contactInfo')}
                                                 className="mt-2 h-12 border-2 border-gray-300 focus:border-blue-500"
                                             />
@@ -277,7 +297,7 @@ const ViewServiceOrderForm = () => {
                                         <Label className="text-base font-semibold ">Email Address</Label>
                                         {isFormMode ? (
                                             <Input
-                                                value={selectedOrder.contactInfo.email}
+                                                value={selectedOrder.contactInfo?.email || ''}
                                                 onChange={(e) => handleInputChange('email', e.target.value, 'contactInfo')}
                                                 className="mt-2 h-12 border-2 border-gray-300 focus:border-blue-500"
                                             />
@@ -301,7 +321,7 @@ const ViewServiceOrderForm = () => {
                                     <Label>Region</Label>
                                     {isFormMode ? (
                                         <Input
-                                            value={selectedOrder.locationInfo.region}
+                                            value={selectedOrder.locationInfo?.region || ''}
                                             onChange={(e) => handleInputChange('region', e.target.value, 'locationInfo')}
                                             className="mt-1"
                                         />
@@ -313,7 +333,7 @@ const ViewServiceOrderForm = () => {
                                     <Label>Sub region</Label>
                                     {isFormMode ? (
                                         <Input
-                                            value={selectedOrder.locationInfo.subRegion}
+                                            value={selectedOrder.locationInfo?.subRegion || ''}
                                             onChange={(e) => handleInputChange('subRegion', e.target.value, 'locationInfo')}
                                             className="mt-1"
                                         />
@@ -325,7 +345,7 @@ const ViewServiceOrderForm = () => {
                                     <Label>Co-ordinates / address of the Site</Label>
                                     {isFormMode ? (
                                         <Input
-                                            value={`${selectedOrder.locationInfo.coordinates.latitude}°S ${selectedOrder.locationInfo.coordinates.longitude}°E`}
+                                            value={`${selectedOrder.locationInfo?.coordinates?.latitude ?? ''}°S ${selectedOrder.locationInfo?.coordinates?.longitude ?? ''}°E`}
                                             onChange={(e) => {
                                                 // Parse coordinates from string
                                                 const coords = e.target.value.split(' ');
@@ -355,7 +375,7 @@ const ViewServiceOrderForm = () => {
                                     <Label>Site ID</Label>
                                     {isFormMode ? (
                                         <Input
-                                            value={selectedOrder.siteDetails.siteId}
+                                            value={selectedOrder.siteDetails?.siteId || ''}
                                             onChange={(e) => handleInputChange('siteId', e.target.value, 'siteDetails')}
                                             className="mt-1"
                                         />
@@ -368,7 +388,7 @@ const ViewServiceOrderForm = () => {
                                         <Label>Site Type</Label>
                                         {isFormMode ? (
                                             <Select
-                                                value={selectedOrder.siteDetails.siteType}
+                                                value={selectedOrder.siteDetails?.siteType || ''}
                                                 onValueChange={(value) => handleInputChange('siteType', value, 'siteDetails')}
                                             >
                                                 <SelectTrigger className="mt-1">
@@ -388,20 +408,20 @@ const ViewServiceOrderForm = () => {
                                         <Label>Roof Type</Label>
                                         {isFormMode ? (
                                             <Input
-                                                value={selectedOrder.siteDetails.roofType || ''}
+                                                value={selectedOrder.siteDetails?.roofType || ''}
                                                 onChange={(e) => handleInputChange('roofType', e.target.value, 'siteDetails')}
                                                 className="mt-1"
                                                 placeholder="(please specify)"
                                             />
                                         ) : (
-                                            <p className="mt-1">{selectedOrder.siteDetails.roofType}</p>
+                                            <p className="mt-1">{selectedOrder.siteDetails?.roofType || ''}</p>
                                         )}
                                     </div>
                                     <div>
                                         <Label>Site Classification</Label>
                                         {isFormMode ? (
                                             <Select
-                                                value={selectedOrder.siteDetails.siteClassification}
+                                                value={selectedOrder.siteDetails?.siteClassification || ''}
                                                 onValueChange={(value) => handleInputChange('siteClassification', value, 'siteDetails')}
                                             >
                                                 <SelectTrigger className="mt-1">
@@ -421,7 +441,7 @@ const ViewServiceOrderForm = () => {
                                         <Label>Last Mile</Label>
                                         {isFormMode ? (
                                             <Select
-                                                value={selectedOrder.siteDetails.lastMile}
+                                                value={selectedOrder.siteDetails?.lastMile || ''}
                                                 onValueChange={(value) => handleInputChange('lastMile', value, 'siteDetails')}
                                             >
                                                 <SelectTrigger className="mt-1">
@@ -440,12 +460,12 @@ const ViewServiceOrderForm = () => {
                                         <Label>Any other (please specify)</Label>
                                         {isFormMode ? (
                                             <Input
-                                                value={selectedOrder.siteDetails.other || ''}
+                                                value={selectedOrder.siteDetails?.other || ''}
                                                 onChange={(e) => handleInputChange('other', e.target.value, 'siteDetails')}
                                                 className="mt-1"
                                             />
                                         ) : (
-                                            <p className="mt-1">{selectedOrder.siteDetails.other}</p>
+                                            <p className="mt-1">{selectedOrder.siteDetails?.other || ''}</p>
                                         )}
                                     </div>
                                 </div>
@@ -459,7 +479,7 @@ const ViewServiceOrderForm = () => {
                             </CardHeader>
                             <CardContent>
                                 <div className="grid grid-cols-2 gap-4">
-                                    {Object.entries(selectedOrder.designSummary).map(([key, value]) => (
+                                    {Object.entries(selectedOrder.designSummary || {}).map(([key, value]) => (
                                         <div key={key}>
                                             <Label className="text-sm font-medium">
                                                 {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
@@ -508,12 +528,12 @@ const ViewServiceOrderForm = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {selectedOrder.billOfMaterials.map((item: { item: string; specs: string; unitOfMeasure: string; quantity: number; rate?: number; total?: number }, index: number) => (
+                                            {(selectedOrder.billOfMaterials || []).map((item: { item: string; specs: string; unitOfMeasure: string; quantity: number; rate?: number; total?: number }, index: number) => (
                                                 <tr key={index} className="hover:print:hover:bg-transparent">
                                                     <td className="border-2 border-gray-300  p-4">
                                                         {isFormMode ? (
                                                             <Input
-                                                                value={item.item}
+                                                                value={item?.item || ''}
                                                                 onChange={(e) => handleMaterialChange(index, 'item', e.target.value)}
                                                                 className="border-none shadow-none text-base"
                                                             />
@@ -524,7 +544,7 @@ const ViewServiceOrderForm = () => {
                                                     <td className="border-2 border-gray-300  p-4">
                                                         {isFormMode ? (
                                                             <Input
-                                                                value={item.specs}
+                                                                value={item?.specs || ''}
                                                                 onChange={(e) => handleMaterialChange(index, 'specs', e.target.value)}
                                                                 className="border-none shadow-none text-base"
                                                             />
@@ -535,7 +555,7 @@ const ViewServiceOrderForm = () => {
                                                     <td className="border-2 border-gray-300  p-4">
                                                         {isFormMode ? (
                                                             <Input
-                                                                value={item.unitOfMeasure}
+                                                                value={item?.unitOfMeasure || ''}
                                                                 onChange={(e) => handleMaterialChange(index, 'unitOfMeasure', e.target.value)}
                                                                 className="border-none shadow-none text-base"
                                                             />
@@ -547,7 +567,7 @@ const ViewServiceOrderForm = () => {
                                                         {isFormMode ? (
                                                             <Input
                                                                 type="number"
-                                                                value={item.quantity}
+                                                                value={item?.quantity || 0}
                                                                 onChange={(e) => handleMaterialChange(index, 'quantity', parseFloat(e.target.value) || 0)}
                                                                 className="border-none shadow-none text-base text-center"
                                                             />
@@ -559,17 +579,17 @@ const ViewServiceOrderForm = () => {
                                                         {isFormMode ? (
                                                             <Input
                                                                 type="number"
-                                                                value={item.rate}
+                                                                value={item?.rate || 0}
                                                                 onChange={(e) => handleMaterialChange(index, 'rate', parseFloat(e.target.value) || 0)}
                                                                 className="border-none shadow-none text-base text-right"
                                                             />
                                                         ) : (
-                                                            <div className="font-semibold ">{formatCurrency(item.rate || 0)}</div>
+                                                            <div className="font-semibold ">{formatCurrency(item?.rate || 0)}</div>
                                                         )}
                                                     </td>
                                                     <td className="border-2 border-gray-300  p-4 text-right">
                                                         <div className="font-bold text-lg  print:">
-                                                            {formatCurrency(item.total || 0)}
+                                                            {formatCurrency(item?.total || 0)}
                                                         </div>
                                                     </td>
                                                     {isFormMode && (

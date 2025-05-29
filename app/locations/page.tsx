@@ -9,6 +9,10 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import LocationsTable from "./components/locations-table/locations"
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+
 function calculateStats(locations: Location[]) {
   const counties = new Set(locations.map((loc) => loc.county)).size
   const statusCounts = locations.reduce(

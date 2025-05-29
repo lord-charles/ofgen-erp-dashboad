@@ -22,14 +22,13 @@ export function DataTableViewOptions<TData>({
   table,
 }: DataTableViewOptionsProps<TData>) {
   useEffect(() => {
-    const columnsToHide = ["combinedName","totalValue"];
+    const columnsToHide = ["combinedName", "employeeId", "position"];
     columnsToHide.forEach((columnId) => {
       const column = table.getColumn(columnId);
       if (column && column.getIsVisible()) {
         column.toggleVisibility(false);
       }
     });
-
   }, [table]);
   return (
     <DropdownMenu>
