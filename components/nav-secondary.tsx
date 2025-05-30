@@ -114,7 +114,6 @@ export function NavSecondary({
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          {/* Quick Actions Dropdown */}
           <SidebarMenuItem>
             <DropdownMenu
               open={isQuickActionsOpen}
