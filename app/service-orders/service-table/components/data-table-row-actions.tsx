@@ -17,13 +17,33 @@ import * as React from "react";
 import { useState } from "react";
 
 import { Pencil, Trash2 } from "lucide-react";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { ServiceOrder } from "../../types/service-order";
 import { ServiceOrderForm } from "../../components/service-order-form";
 import { ViewServiceOrder } from "../../components/view-service-order";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
-import { deleteServiceOrder, updateServiceOrder } from "@/services/service-order-service";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
+  deleteServiceOrder,
+  updateServiceOrder,
+} from "@/services/service-order-service";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import ViewServiceOrderForm from "./service-form";
 
@@ -38,7 +58,7 @@ export function DataTableRowActions<TData>({
   const [isViewDrawerOpen, setIsViewDrawerOpen] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
-  const [viewForm, setViewForm] = useState(false)
+  const [viewForm, setViewForm] = useState(false);
   const { toast } = useToast();
   const order = row.original as ServiceOrder;
 
@@ -61,7 +81,11 @@ export function DataTableRowActions<TData>({
     setLoadingDelete(true);
     try {
       await deleteServiceOrder(order._id);
-      toast({ title: "Deleted", description: "Service Order deleted successfully", variant: "default" });
+      toast({
+        title: "Deleted",
+        description: "Service Order deleted successfully",
+        variant: "default",
+      });
       setIsViewDrawerOpen(false);
       setIsEditDrawerOpen(false);
       setTimeout(() => {
@@ -82,7 +106,11 @@ export function DataTableRowActions<TData>({
     setLoadingUpdate(true);
     try {
       await updateServiceOrder(order._id, data);
-      toast({ title: "Updated", description: "Service Order updated successfully", variant: "default" });
+      toast({
+        title: "Updated",
+        description: "Service Order updated successfully",
+        variant: "default",
+      });
       setIsEditDrawerOpen(false);
       setTimeout(() => {
         window.location.reload();
@@ -100,9 +128,10 @@ export function DataTableRowActions<TData>({
 
   const handleViewOrder = () => setIsViewDrawerOpen(true);
   const handleEditOrder = () => setIsEditDrawerOpen(true);
-  const handleViewForm = () => { localStorage.setItem('selectedServiceOrder', JSON.stringify(order)); setViewForm(true) }
-
-
+  const handleViewForm = () => {
+    localStorage.setItem("selectedServiceOrder", JSON.stringify(order));
+    setViewForm(true);
+  };
 
   return (
     <>
@@ -133,7 +162,10 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSeparator />
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <DropdownMenuItem className="text-red-600 focus:text-red-700" onSelect={e => e.preventDefault()}>
+              <DropdownMenuItem
+                className="text-red-600 focus:text-red-700"
+                onSelect={(e) => e.preventDefault()}
+              >
                 <Trash2 className="h-5 w-5" />
                 Delete
                 <DropdownMenuShortcut>Del</DropdownMenuShortcut>
@@ -143,12 +175,20 @@ export function DataTableRowActions<TData>({
               <AlertDialogHeader>
                 <AlertDialogTitle>Delete Service Order</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to delete <b>{order.locationInfo?.region || order.issuedBy}</b>? This action cannot be undone.
+                  Are you sure you want to delete{" "}
+                  <b>{order.locationInfo?.region || order.issuedBy}</b>? This
+                  action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel disabled={loadingDelete}>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} disabled={loadingDelete} className="bg-red-600 hover:bg-red-700 text-white">
+                <AlertDialogCancel disabled={loadingDelete}>
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  disabled={loadingDelete}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+                >
                   {loadingDelete ? "Deleting..." : "Delete"}
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -175,7 +215,9 @@ export function DataTableRowActions<TData>({
         <DrawerContent className="max-h-[96vh]">
           <DrawerHeader>
             <DrawerTitle>Service Order Details</DrawerTitle>
-            <DrawerDescription>Complete information about the selected service order</DrawerDescription>
+            <DrawerDescription>
+              Complete information about the selected service order
+            </DrawerDescription>
           </DrawerHeader>
           <ViewServiceOrder order={order} />
         </DrawerContent>
@@ -186,9 +228,6 @@ export function DataTableRowActions<TData>({
           <ViewServiceOrderForm />
         </DrawerContent>
       </Drawer>
-
-
     </>
   );
 }
-

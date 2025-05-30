@@ -294,3 +294,20 @@ export async function deleteProject(id: string): Promise<boolean> {
     throw error?.response?.data.message || error;
   }
 }
+
+// Fetch dashboard data from the backend
+export async function getDashboardData() {
+  try {
+    const config = await getAxiosConfig();
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/dashboard`,
+      config
+    );
+    return response.data;
+  } catch (error: any) {
+    if (error instanceof AxiosError && error.response?.status === 401) {
+      await handleUnauthorized();
+    }
+    throw error?.response?.data.message || error;
+  }
+}
