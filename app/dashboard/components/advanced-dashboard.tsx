@@ -51,249 +51,7 @@ import { ResourceManagement } from "./resource-management";
 import { FinancialAnalytics } from "./financial-analytics";
 import { RiskManagement } from "./risk-management";
 import { RecentActivities } from "./recent-activities";
-
-// const dashboardData = {
-//   overview: {
-//     totalProjects: 24,
-//     activeProjects: 16,
-//     completedProjects: 6,
-//     onHoldProjects: 2,
-//     totalContractValue: 125000000,
-//     monthlyRevenue: 8500000,
-//     totalLocations: 32,
-//     activeSubcontractors: 48,
-//     pendingServiceOrders: 12,
-//     completionRate: 87.5,
-//     avgProjectDuration: 45,
-//     clientSatisfaction: 4.8,
-//     profitMargin: 18.5,
-//   },
-//   projects: [
-//     {
-//       id: "68364344c6037367c6987339",
-//       name: "Kitengela Solar Power Installation",
-//       status: "In Progress",
-//       progress: 75,
-//       contractValue: 3500000,
-//       targetCompletion: "2025-08-15",
-//       actualStart: "2025-06-03",
-//       location: "Nairobi North Site",
-//       priority: "High",
-//       projectLeader: "Charles Mihunyo",
-//       client: "SAFARICOM PLC",
-//       capacity: "25 kW",
-//       type: "Solar Power Installation",
-//       milestones: 4,
-//       completedMilestones: 3,
-//       risks: 2,
-//       team: 8,
-//     },
-//     {
-//       id: "68364344c6037367c6987340",
-//       name: "Mombasa Backup Power System",
-//       status: "Planning",
-//       progress: 15,
-//       contractValue: 5200000,
-//       targetCompletion: "2025-09-30",
-//       actualStart: null,
-//       location: "Mombasa Industrial Site",
-//       priority: "Medium",
-//       projectLeader: "Jane Wanjiku",
-//       client: "AIRTEL KENYA",
-//       capacity: "40 kW",
-//       type: "Backup Power System",
-//       milestones: 6,
-//       completedMilestones: 0,
-//       risks: 1,
-//       team: 12,
-//     },
-//     {
-//       id: "68364344c6037367c6987341",
-//       name: "Kisumu Grid Integration",
-//       status: "Completed",
-//       progress: 100,
-//       contractValue: 2800000,
-//       targetCompletion: "2025-05-20",
-//       actualStart: "2025-03-01",
-//       location: "Kisumu Central",
-//       priority: "Low",
-//       projectLeader: "Charles Mihunyo",
-//       client: "KENYA POWER",
-//       capacity: "15 kW",
-//       type: "Grid Integration",
-//       milestones: 3,
-//       completedMilestones: 3,
-//       risks: 0,
-//       team: 6,
-//     },
-//   ],
-//   locations: [
-//     {
-//       id: "6831244be51eb38688fe84bb",
-//       name: "Nairobi North Site",
-//       county: "Nairobi",
-//       region: "Central",
-//       status: "active",
-//       siteType: "outdoor",
-//       projectsCount: 3,
-//       coordinates: { lat: -1.2921, lng: 36.8219 },
-//       capacity: "75 kW",
-//       utilization: 85,
-//     },
-//     {
-//       id: "6831244be51eb38688fe84bc",
-//       name: "Mombasa Industrial Site",
-//       county: "Mombasa",
-//       region: "Coast",
-//       status: "active",
-//       siteType: "industrial",
-//       projectsCount: 2,
-//       coordinates: { lat: -4.0435, lng: 39.6682 },
-//       capacity: "120 kW",
-//       utilization: 92,
-//     },
-//     {
-//       id: "6831244be51eb38688fe84bd",
-//       name: "Kisumu Central",
-//       county: "Kisumu",
-//       region: "Nyanza",
-//       status: "maintenance",
-//       siteType: "urban",
-//       projectsCount: 1,
-//       coordinates: { lat: -0.0917, lng: 34.768 },
-//       capacity: "45 kW",
-//       utilization: 67,
-//     },
-//   ],
-//   serviceOrders: [
-//     {
-//       id: "6835b53a4163f41c4997c2bb",
-//       issuedBy: "AIRTEL KENYA",
-//       issuedTo: "OFGEN LTD",
-//       status: "approved",
-//       serviceOrderDate: "2025-05-14",
-//       region: "NYANZA",
-//       totalValue: 4200000,
-//       priority: "High",
-//       dueDate: "2025-06-30",
-//     },
-//     {
-//       id: "6835b53a4163f41c4997c2bc",
-//       issuedBy: "SAFARICOM PLC",
-//       issuedTo: "OFGEN LTD",
-//       status: "draft",
-//       serviceOrderDate: "2025-05-20",
-//       region: "CENTRAL",
-//       totalValue: 3800000,
-//       priority: "Medium",
-//       dueDate: "2025-07-15",
-//     },
-//   ],
-//   subcontractors: [
-//     {
-//       id: "6837732a0407ba48dbb74011",
-//       name: "Charles Mwaniki",
-//       type: "individual",
-//       specialty: "Civil Works",
-//       status: "active",
-//       rating: 4.5,
-//       projectsAssigned: 3,
-//       completionRate: 95,
-//       location: "Nairobi",
-//     },
-//     {
-//       id: "683745e70407ba48dbb73fcd",
-//       name: "Nairobi Electrical Solutions Ltd",
-//       type: "company",
-//       specialty: "Electrical Installation",
-//       status: "active",
-//       rating: 4.2,
-//       projectsAssigned: 5,
-//       completionRate: 88,
-//       location: "Nairobi",
-//     },
-//   ],
-//   risks: [
-//     {
-//       id: "1",
-//       title: "Delayed Equipment Delivery",
-//       description:
-//         "Potential delay in delivery of solar panels from Mombasa port",
-//       severity: "Medium",
-//       probability: 0.4,
-//       impact: 7,
-//       status: "Open",
-//       owner: "Charles Mihunyo",
-//       project: "Kitengela Solar Power Installation",
-//       identifiedDate: "2025-05-20",
-//       targetResolution: "2025-05-30",
-//     },
-//     {
-//       id: "2",
-//       title: "Weather Conditions",
-//       description: "Rainy season may affect outdoor installations",
-//       severity: "Low",
-//       probability: 0.6,
-//       impact: 4,
-//       status: "Monitoring",
-//       owner: "Jane Wanjiku",
-//       project: "Mombasa Backup Power System",
-//       identifiedDate: "2025-05-22",
-//       targetResolution: "2025-06-15",
-//     },
-//   ],
-//   activities: [
-//     {
-//       id: "1",
-//       type: "project_update",
-//       title: "Kitengela Solar Installation - Milestone Completed",
-//       description:
-//         "Site preparation and foundation work completed ahead of schedule",
-//       timestamp: "2025-05-29T14:30:00Z",
-//       user: "Charles Mihunyo",
-//       priority: "normal",
-//     },
-//     {
-//       id: "2",
-//       type: "risk_identified",
-//       title: "New Risk Identified - Equipment Delivery",
-//       description: "Potential delay in solar panel delivery identified",
-//       timestamp: "2025-05-29T10:15:00Z",
-//       user: "System",
-//       priority: "high",
-//     },
-//     {
-//       id: "3",
-//       type: "service_order",
-//       title: "New Service Order - AIRTEL KENYA",
-//       description: "Service order SO-2025-001 approved and assigned",
-//       timestamp: "2025-05-29T09:00:00Z",
-//       user: "Jane Wanjiku",
-//       priority: "normal",
-//     },
-//   ],
-//   financials: {
-//     monthlyRevenue: [
-//       { month: "Jan", revenue: 6500000, target: 7000000 },
-//       { month: "Feb", revenue: 7200000, target: 7000000 },
-//       { month: "Mar", revenue: 8100000, target: 7500000 },
-//       { month: "Apr", revenue: 7800000, target: 8000000 },
-//       { month: "May", revenue: 8500000, target: 8000000 },
-//     ],
-//     projectValues: [
-//       { status: "Completed", value: 16800000 },
-//       { status: "In Progress", value: 42000000 },
-//       { status: "Planning", value: 28500000 },
-//       { status: "On Hold", value: 8200000 },
-//     ],
-//     expenses: {
-//       materials: 35000000,
-//       labor: 18000000,
-//       equipment: 12000000,
-//       overhead: 8500000,
-//     },
-//   },
-// };
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdvancedDashboard({
   dashboardData,
@@ -303,14 +61,143 @@ export default function AdvancedDashboard({
   const [activeTab, setActiveTab] = useState("overview");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
-  const [refreshing, setRefreshing] = useState(false);
-
+  const { toast } = useToast();
   const handleRefresh = async () => {
-    setRefreshing(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setRefreshing(false);
+    window.location.reload();
   };
+
+  // --- CSV Export Helpers ---
+  // Flattens nested objects for CSV compatibility
+  function flattenObject(obj: any, prefix = ""): Record<string, any> {
+    return Object.keys(obj).reduce((acc, k) => {
+      const pre = prefix.length ? prefix + "." : "";
+      if (
+        typeof obj[k] === "object" &&
+        obj[k] !== null &&
+        !Array.isArray(obj[k])
+      ) {
+        Object.assign(acc, flattenObject(obj[k], pre + k));
+      } else {
+        acc[pre + k] = obj[k];
+      }
+      return acc;
+    }, {} as Record<string, any>);
+  }
+
+  function arrayToCSV(arr: any[], columns?: string[]): string {
+    if (!arr || arr.length === 0) return "";
+    // Flatten all rows
+    const flatArr = arr.map(flattenObject);
+    const keys =
+      columns ||
+      Array.from(new Set(flatArr.flatMap((row) => Object.keys(row))));
+    const escape = (val: any) => `"${String(val ?? "").replace(/"/g, '""')}"`;
+    const rows = [
+      keys.join(","),
+      ...flatArr.map((row) => keys.map((k) => escape(row[k])).join(",")),
+    ];
+    return rows.join("\n");
+  }
+
+  function objectToCSV(obj: any): string {
+    const flat = flattenObject(obj);
+    const keys = Object.keys(flat);
+    const escape = (val: any) => `"${String(val ?? "").replace(/"/g, '""')}"`;
+    return [keys.join(","), keys.map((k) => escape(flat[k])).join(",")].join(
+      "\n"
+    );
+  }
+
+  function downloadCSV(filename: string, csv: string) {
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function handleExport() {
+    const csvSections: string[] = [];
+    // Overview (single row)
+    if (dashboardData.overview) {
+      csvSections.push("--- Overview ---");
+      csvSections.push(objectToCSV(dashboardData.overview));
+      csvSections.push("");
+    }
+    // Projects
+    if (dashboardData.projects && dashboardData.projects.length > 0) {
+      csvSections.push("--- Projects ---");
+      csvSections.push(arrayToCSV(dashboardData.projects));
+      csvSections.push("");
+    }
+    // Locations (flatten coordinates)
+    if (dashboardData.locations && dashboardData.locations.length > 0) {
+      csvSections.push("--- Locations ---");
+      csvSections.push(arrayToCSV(dashboardData.locations));
+      csvSections.push("");
+    }
+    // Service Orders
+    if (dashboardData.serviceOrders && dashboardData.serviceOrders.length > 0) {
+      csvSections.push("--- Service Orders ---");
+      csvSections.push(arrayToCSV(dashboardData.serviceOrders));
+      csvSections.push("");
+    }
+    // Subcontractors
+    if (
+      dashboardData.subcontractors &&
+      dashboardData.subcontractors.length > 0
+    ) {
+      csvSections.push("--- Subcontractors ---");
+      csvSections.push(arrayToCSV(dashboardData.subcontractors));
+      csvSections.push("");
+    }
+    // Risks
+    if (dashboardData.risks && dashboardData.risks.length > 0) {
+      csvSections.push("--- Risks ---");
+      csvSections.push(arrayToCSV(dashboardData.risks));
+      csvSections.push("");
+    }
+    // Activities
+    if (dashboardData.activities && dashboardData.activities.length > 0) {
+      csvSections.push("--- Activities ---");
+      csvSections.push(arrayToCSV(dashboardData.activities));
+      csvSections.push("");
+    }
+    // Financials (monthlyRevenue, projectValues, expenses)
+    if (dashboardData.financials) {
+      if (
+        dashboardData.financials.monthlyRevenue &&
+        dashboardData.financials.monthlyRevenue.length > 0
+      ) {
+        csvSections.push("--- Financials: Monthly Revenue ---");
+        csvSections.push(arrayToCSV(dashboardData.financials.monthlyRevenue));
+        csvSections.push("");
+      }
+      if (
+        dashboardData.financials.projectValues &&
+        dashboardData.financials.projectValues.length > 0
+      ) {
+        csvSections.push("--- Financials: Project Values ---");
+        csvSections.push(arrayToCSV(dashboardData.financials.projectValues));
+        csvSections.push("");
+      }
+      if (dashboardData.financials.expenses) {
+        csvSections.push("--- Financials: Expenses ---");
+        csvSections.push(objectToCSV(dashboardData.financials.expenses));
+        csvSections.push("");
+      }
+    }
+    // Timestamped filename
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, "-");
+    const filename = `dashboard-export-${timestamp}.csv`;
+    const csv = csvSections.join("\n");
+    downloadCSV(filename, csv);
+  }
 
   const filteredProjects = useMemo(() => {
     return dashboardData.projects.filter((project: any) => {
@@ -332,22 +219,24 @@ export default function AdvancedDashboard({
           <GreetingHeader />
 
           <div className="flex items-center space-x-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              disabled={refreshing}
-            >
-              <RefreshCw
-                className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`}
-              />
+            <Button variant="outline" size="sm" onClick={handleRefresh}>
+              <RefreshCw className={`w-4 h-4 mr-2`} />
               Refresh
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={handleExport}>
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                toast({
+                  title: "Settings",
+                  description: "Settings feature coming soon!",
+                });
+              }}
+            >
               <Settings className="w-4 h-4 mr-2" />
               Settings
             </Button>

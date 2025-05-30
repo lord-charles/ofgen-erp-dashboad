@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 export function GreetingHeader() {
+  const { data: session } = useSession();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isVisible, setIsVisible] = useState(false);
 
@@ -54,10 +56,11 @@ export function GreetingHeader() {
         <h1
           className={cn(
             "text-xl md:text-2xl font-semibold tracking-tight transition-all duration-300",
-            "text-foreground hover:text-foreground/90"
+            " hover:text-foreground/90 bg-gradient-to-r from-green-600 to-purple-600 bg-clip-text text-transparent"
           )}
         >
-          {getGreeting()}, Charles Mwaniki
+          {getGreeting()}, {session?.user?.firstName || ""}{" "}
+          {session?.user?.lastName || ""}
         </h1>
         <div className="flex items-center gap-1">
           <p

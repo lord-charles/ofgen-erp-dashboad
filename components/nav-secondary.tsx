@@ -2,6 +2,10 @@
 
 import * as React from "react";
 import { useState } from "react";
+import AddContractorDialog from "@/components/add-contractor-dialog";
+import AddSubcontractorDialog from "@/components/add-subcontractor";
+import ServiceOrderDialog from "@/components/service-order-dialog";
+import { AddLocationDialog } from "@/app/locations/components/add-location-dialog";
 import {
   BarChart3Icon,
   HardDriveIcon,
@@ -16,6 +20,7 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 import {
   SidebarGroup,
@@ -33,62 +38,23 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-interface QuickAction {
-  title: string;
-  icon: LucideIcon;
-  action: () => void;
-  description: string;
-}
-
 export function NavSecondary({
   ...props
 }: {} & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   const pathname = usePathname();
+  const { toast } = useToast();
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
 
-  // Quick Actions - no map, explicit rendering
-  const quickActionNewSite: QuickAction = {
-    title: "New Site",
-    icon: BuildingIcon,
-    description: "Create a new site/location",
-    action: () => {
-      console.log("Creating new site...");
-      // Add your navigation or modal logic here
-      // Example: router.push('/sites/create')
-    },
-  };
-  const quickActionServiceOrder: QuickAction = {
-    title: "Service Order",
-    icon: ClipboardListIcon,
-    description: "Create a new service order",
-    action: () => {
-      console.log("Creating new service order...");
-      // Add your navigation or modal logic here
-      // Example: router.push('/orders/create')
-    },
-  };
-  const quickActionContractor: QuickAction = {
-    title: "Contractor",
-    icon: UsersIcon,
-    description: "Add a new contractor",
-    action: () => {
-      console.log("Creating new contractor...");
-      // Add your navigation or modal logic here
-      // Example: router.push('/contractors/create')
-    },
-  };
-  const quickActionSubcontractor: QuickAction = {
-    title: "Subcontractor",
-    icon: UserCheckIcon,
-    description: "Add a new subcontractor",
-    action: () => {
-      console.log("Creating new subcontractor...");
-      // Add your navigation or modal logic here
-      // Example: router.push('/subcontractors/create')
-    },
-  };
+  const [isAddLocationDialogOpen, setIsAddLocationDialogOpen] = useState(false);
 
-  // Regular Items - no map, explicit rendering
+  const [isAddServiceOrderDialogOpen, setIsAddServiceOrderDialogOpen] =
+    useState(false);
+
+  const [isAddContractorDialogOpen, setIsAddContractorDialogOpen] =
+    useState(false);
+  const [isAddSubcontractorDialogOpen, setIsAddSubcontractorDialogOpen] =
+    useState(false);
+
   const isAnalyticsActive = pathname === "/dashboard";
   const isSettingsActive = pathname === "/settings";
 
@@ -98,8 +64,7 @@ export function NavSecondary({
         System
       </SidebarGroupLabel>
       <SidebarGroupContent>
-        <SidebarMenu className="gap-1">
-          {/* Regular navigation items - explicit rendering */}
+        <SidebarMenu className="gap-1 mt-2">
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
@@ -108,7 +73,11 @@ export function NavSecondary({
             >
               <Link href="/dashboard" className="flex items-center gap-3">
                 <BarChart3Icon
-                  className={`transition-colors ${isAnalyticsActive ? "text-emerald-600 dark:text-emerald-400" : ""}`}
+                  className={`transition-colors ${
+                    isAnalyticsActive
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : ""
+                  }`}
                 />
                 <span className="font-medium">Analytics</span>
                 {isAnalyticsActive && (
@@ -122,16 +91,26 @@ export function NavSecondary({
               asChild
               isActive={isSettingsActive}
               className="group relative transition-all duration-200 hover:bg-sidebar-accent/50 data-[active=true]:bg-emerald-50 data-[active=true]:text-emerald-700 data-[active=true]:shadow-sm dark:data-[active=true]:bg-emerald-950/30 dark:data-[active=true]:text-emerald-400"
+              onClick={() => {
+                toast({
+                  title: "Settings",
+                  description: "Settings feature coming soon!",
+                });
+              }}
             >
-              <Link href="/settings" className="flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <SettingsIcon
-                  className={`transition-colors ${isSettingsActive ? "text-emerald-600 dark:text-emerald-400" : ""}`}
+                  className={`transition-colors ${
+                    isSettingsActive
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : ""
+                  }`}
                 />
-                <span className="font-medium">Settings</span>
+                <span className="font-medium text-md">Settings</span>
                 {isSettingsActive && (
                   <div className="absolute right-2 h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
                 )}
-              </Link>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
@@ -170,10 +149,10 @@ export function NavSecondary({
                   </p>
                 </div>
 
-                {/* Quick Actions - explicit rendering, no map */}
+                {/* Quick Actions */}
                 <React.Fragment>
                   <DropdownMenuItem
-                    onClick={quickActionNewSite.action}
+                    onClick={() => setIsAddLocationDialogOpen(true)}
                     className="group flex items-start gap-3 px-3 py-3 cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-950/30 focus:bg-emerald-50 dark:focus:bg-emerald-950/30 transition-colors"
                   >
                     <div className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-900/50 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900 transition-colors">
@@ -193,7 +172,7 @@ export function NavSecondary({
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-gray-100 dark:bg-gray-700" />
                   <DropdownMenuItem
-                    onClick={quickActionServiceOrder.action}
+                    onClick={() => setIsAddServiceOrderDialogOpen(true)}
                     className="group flex items-start gap-3 px-3 py-3 cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-950/30 focus:bg-emerald-50 dark:focus:bg-emerald-950/30 transition-colors"
                   >
                     <div className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-900/50 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900 transition-colors">
@@ -213,7 +192,7 @@ export function NavSecondary({
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-gray-100 dark:bg-gray-700" />
                   <DropdownMenuItem
-                    onClick={quickActionContractor.action}
+                    onClick={() => setIsAddContractorDialogOpen(true)}
                     className="group flex items-start gap-3 px-3 py-3 cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-950/30 focus:bg-emerald-50 dark:focus:bg-emerald-950/30 transition-colors"
                   >
                     <div className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-900/50 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900 transition-colors">
@@ -233,7 +212,7 @@ export function NavSecondary({
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-gray-100 dark:bg-gray-700" />
                   <DropdownMenuItem
-                    onClick={quickActionSubcontractor.action}
+                    onClick={() => setIsAddSubcontractorDialogOpen(true)}
                     className="group flex items-start gap-3 px-3 py-3 cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-950/30 focus:bg-emerald-50 dark:focus:bg-emerald-950/30 transition-colors"
                   >
                     <div className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-900/50 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900 transition-colors">
@@ -254,6 +233,24 @@ export function NavSecondary({
                 </React.Fragment>
               </DropdownMenuContent>
             </DropdownMenu>
+            <AddLocationDialog
+              open={isAddLocationDialogOpen}
+              setOpen={setIsAddLocationDialogOpen}
+            />
+            <AddContractorDialog
+              open={isAddContractorDialogOpen}
+              setOpen={setIsAddContractorDialogOpen}
+              onAdd={() => setIsAddContractorDialogOpen(false)}
+            />
+            <AddSubcontractorDialog
+              open={isAddSubcontractorDialogOpen}
+              setOpen={setIsAddSubcontractorDialogOpen}
+              onAdd={() => setIsAddSubcontractorDialogOpen(false)}
+            />
+            <ServiceOrderDialog
+              open={isAddServiceOrderDialogOpen}
+              setOpen={setIsAddServiceOrderDialogOpen}
+            />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
