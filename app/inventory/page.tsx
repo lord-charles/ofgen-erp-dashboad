@@ -1,15 +1,41 @@
-export default function InventoryPage() {
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { InventoryDashboard } from "./inventory-dashboard";
+import {
+  getAllWarehouses,
+  getInventoryItems,
+  getSuppliers,
+  getDashboardStats,
+} from "@/services/inventory-service";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function LocationsPage() {
+  const [warehouses, inventoryItems, suppliers, dashboardStats] =
+    await Promise.all([
+      getAllWarehouses(),
+      getInventoryItems(),
+      getSuppliers(),
+      getDashboardStats(),
+    ]);
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-      <div className="flex items-center">
-        <h1 className="text-lg font-semibold md:text-2xl">Inventory</h1>
-      </div>
-      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
-        <div className="flex flex-col items-center gap-1 text-center">
-          <h3 className="text-2xl font-bold tracking-tight">Inventory Management</h3>
-          <p className="text-sm text-muted-foreground">Track and manage your electronic equipment and components</p>
+    <SidebarProvider>
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="min-h-screen">
+          <div className="p-2">
+            <InventoryDashboard
+              warehouses={warehouses}
+              inventoryItems={inventoryItems}
+              suppliers={suppliers}
+              dashboardStats={dashboardStats}
+            />
+          </div>
         </div>
-      </div>
-    </div>
-  )
+      </SidebarInset>
+    </SidebarProvider>
+  );
 }
