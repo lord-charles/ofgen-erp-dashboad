@@ -19,7 +19,7 @@ const SubcontractorStats = ({subcontractorData}: {subcontractorData: any}) => {
     textColor: string;
   }) => {
     return (
-      <div className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+      <div className="group relative overflow-hidden rounded-3xl bg-white p-6 sm:p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
         {/* Background gradient overlay */}
         <div className={`absolute inset-0 ${gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
         
@@ -34,7 +34,7 @@ const SubcontractorStats = ({subcontractorData}: {subcontractorData: any}) => {
                 {title}
               </p>
               <div className="flex items-end space-x-3">
-                <h3 className={`text-4xl font-bold ${textColor} leading-none`}>
+                <h3 className={`text-3xl sm:text-4xl font-bold ${textColor} leading-none`}>
                   {value}
                 </h3>
                 {trend && (
@@ -56,8 +56,8 @@ const SubcontractorStats = ({subcontractorData}: {subcontractorData: any}) => {
             </div>
             
             {/* Icon container with enhanced styling */}
-            <div className={`relative p-4 rounded-2xl ${gradient} bg-opacity-15 group-hover:bg-opacity-25 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3`}>
-              <Icon className={`h-8 w-8 ${textColor}`} />
+            <div className={`relative p-3 sm:p-4 rounded-2xl ${gradient} bg-opacity-15 group-hover:bg-opacity-25 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+              <Icon className={`h-7 w-7 sm:h-8 sm:w-8 ${textColor}`} />
               {/* Icon glow effect */}
               <div className={`absolute inset-0 ${gradient} opacity-20 rounded-2xl blur-md group-hover:opacity-40 transition-opacity duration-300`} />
             </div>
